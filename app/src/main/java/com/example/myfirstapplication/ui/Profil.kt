@@ -2,6 +2,7 @@ package com.example.myfirstapplication.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,9 +40,11 @@ fun Screen(classes: WindowSizeClass, navController:NavController) {
     when (classes.windowWidthSizeClass) {
         WindowWidthSizeClass.COMPACT -> { //PORTRAIT
             Column(
-                Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.LightGray)
             ) {
                 Presentation()
                 Socials()
@@ -49,12 +54,15 @@ fun Screen(classes: WindowSizeClass, navController:NavController) {
 
         else -> { //PAYSAGE
             Row(
-                Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Presentation()
                 }
@@ -74,7 +82,7 @@ fun Screen(classes: WindowSizeClass, navController:NavController) {
 fun Presentation() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             painterResource(id = R.drawable.accueil_1_saphir_m),
@@ -98,7 +106,12 @@ fun Presentation() {
 
 @Composable
 fun Socials() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(10.dp)
+            .background(Color.Cyan, CircleShape.copy(all = CornerSize(8.dp))),
+        ) {
         Column() {
             Icon(
                 painter = painterResource(R.drawable.baseline_email_24),

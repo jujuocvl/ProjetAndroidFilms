@@ -1,6 +1,5 @@
 package com.example.myfirstapplication
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,21 +8,26 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +51,7 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.myfirstapplication.ui.ActeursScreen
 import com.example.myfirstapplication.ui.Bouton
-import com.example.myfirstapplication.ui.Films
+import com.example.myfirstapplication.ui.FilmsScreen
 import com.example.myfirstapplication.ui.theme.MyFirstApplicationTheme
 import kotlinx.serialization.Serializable
 
@@ -69,6 +73,9 @@ class SeriesDest
 @Serializable
 class ActeursDest
 
+@Serializable
+class SearchDest
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,61 +86,108 @@ class MainActivity : ComponentActivity() {
             val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
-            val viewmodel : MainViewModel by viewModels()
+            val viewmodel: MainViewModel by viewModels()
+            val isProfilDest = currentDestination?.hasRoute<ProfilDest>() == true
 
             MyFirstApplicationTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        if (!isProfilDest) {
+                            Surface(
+                                color = Color.Cyan
+                            )
+                            {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(15.dp)
+                                ) {
+                                    TextButton(
+                                        onClick = { navController.navigate(ProfilDest()) },
+                                        colors = ButtonDefaults.textButtonColors(Color.Blue)
+                                    ) {
+                                        Text(
+                                            "Profil",
+                                            color = Color.White
+                                        )
+                                    }
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_search_24),
+                                        contentDescription = "recherche",
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .clickable { navController.navigate(SearchDest()) },
+                                    )
+                                }
+                            }
+                        }
+                    },
                     bottomBar = {
-                        NavigationBar(containerColor = Color.Cyan) {
-                            NavigationBarItem(
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.baseline_local_movies_24),
-                                        contentDescription = "movies",
+                        if (!isProfilDest) {
+                            Surface(
+                                color = Color.Cyan
+                            )
+                            {
+                                NavigationBar(
+                                    containerColor = Color.Cyan,
+                                )
+                                {
+                                    NavigationBarItem(
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(R.drawable.baseline_local_movies_24),
+                                                contentDescription = "movies",
+                                            )
+                                        }, label = { Text("Films") },
+                                        selected = currentDestination?.hasRoute<FilmsDest>() == true,
+                                        onClick = { navController.navigate(FilmsDest()) }
                                     )
-                                }, label = { Text("Films") },
-                                selected = currentDestination?.hasRoute<FilmsDest>() == true,
-                                onClick = { navController.navigate(FilmsDest()) })
-                            NavigationBarItem(
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.baseline_tv_24),
-                                        contentDescription = "series",
+                                    NavigationBarItem(
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(R.drawable.baseline_tv_24),
+                                                contentDescription = "series",
+                                            )
+                                        }, label = { Text("Séries") },
+                                        selected = currentDestination?.hasRoute<SeriesDest>() == true,
+                                        onClick = { navController.navigate(SeriesDest()) }
                                     )
-                                }, label = { Text("Séries") },
-                                selected = currentDestination?.hasRoute<SeriesDest>() == true,
-                                onClick = { navController.navigate(SeriesDest()) })
-                            NavigationBarItem(
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.baseline_person_24),
-                                        contentDescription = "acteurs",
-                                    )
-                                }, label = { Text("Acteurs") },
-                                selected = currentDestination?.hasRoute<ActeursDest>() == true,
-                                onClick = { navController.navigate(ActeursDest()) })
+                                    NavigationBarItem(
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(R.drawable.baseline_person_24),
+                                                contentDescription = "acteurs",
+                                            )
+                                        }, label = { Text("Acteurs") },
+                                        selected = currentDestination?.hasRoute<ActeursDest>() == true,
+                                        onClick = { navController.navigate(ActeursDest()) })
+                                }
+                            }
                         }
                     }
-
                 )
 
                 { innerPadding ->
                     NavHost(
                         navController, startDestination = ProfilDest(),
-                            Modifier.padding(innerPadding)
+                        Modifier.padding(innerPadding)
                     ) {
-                        composable<ProfilDest> { Screen(windowSizeClass, navController) }
-                        composable<FilmsDest> { Films(viewmodel) }
+                        composable<ProfilDest> {
+                            Screen(
+                                windowSizeClass,
+                                navController
+                            )
+                        }
+                        composable<FilmsDest> { FilmsScreen(viewmodel) }
                         composable<SeriesDest> { SeriesScreen(viewmodel) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
                     }
                 }
             }
         }
-
-
-
     }
 }
 

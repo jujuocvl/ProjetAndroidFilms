@@ -7,28 +7,51 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
 
 class MainViewModel : ViewModel() {
-    //StateFlow maitient l'état de la liste des films
-    private val listMovies = MutableStateFlow<List<Movie>>(emptyList())
-    val movies: StateFlow<List<Movie>> = listMovies
-
     //Initialisation de Retrofit
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
         .addConverterFactory(MoshiConverterFactory.create())
         .build();
-
     val api = retrofit.create(TmdbAPI::class.java)
     val api_key= "317519a83cc36ab9367ba50e5aa75b40"
 
-    // Fonction pour récupérer les films initiaux
-    fun getFilmsInitiaux() {
+
+    //FILMS : StateFlow maitient l'état de la liste des films
+    private val listMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val movies: StateFlow<List<Movie>> = listMovies
+
+    //SERIES: StateFlow maitient l'état de la liste des series
+    private val listSeries = MutableStateFlow<List<Series>>(emptyList())
+    val series: StateFlow<List<Series>> = listSeries
+
+    //ACTEURS: StateFlow maitient l'état de la liste des series
+    private val listActors = MutableStateFlow<List<Actors>>(emptyList())
+    val actors: StateFlow<List<Actors>> = listActors
+
+    // Fonction pour récupérer les films
+    fun getFilms() {
         viewModelScope.launch {
             // Appel à l'API pour obtenir la liste des films
             val filmsList = api.getFilmTendance(api_key)
             listMovies.value = filmsList.results
+        }
+    }
+
+    fun getSeries() {
+        viewModelScope.launch {
+            // Appel à l'API pour obtenir la liste des séries
+            val seriesList = api.getSeriesTendance(api_key)
+            listSeries.value = seriesList.results
+        }
+    }
+
+    fun getActors() {
+        viewModelScope.launch {
+            // Appel à l'API pour obtenir la liste des acteurs
+            val actorsList = api.getActeursTendance(api_key)
+            listActors.value = actorsList.results
         }
     }
 }
