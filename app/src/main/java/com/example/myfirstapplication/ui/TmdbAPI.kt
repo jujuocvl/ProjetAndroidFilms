@@ -14,8 +14,8 @@ interface TmdbAPI {
     @GET("trending/person/week")
     suspend fun getActeursTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbActorsResult
 
-    //@GET("search/movie")
-    //suspend fun getFilmParMotCle(@Query("motcle") motcle: String): TmbdResult
+    @GET("movie/api_key")
+    suspend fun getFilmParMotCle(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
 
 
 }

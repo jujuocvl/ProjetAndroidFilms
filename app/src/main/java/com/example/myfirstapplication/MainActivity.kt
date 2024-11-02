@@ -10,7 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +24,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +33,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,6 +62,7 @@ import kotlinx.serialization.Serializable
 import com.example.myfirstapplication.ui.MainViewModel
 import com.example.myfirstapplication.ui.Presentation
 import com.example.myfirstapplication.ui.Screen
+import com.example.myfirstapplication.ui.SearchScreen
 import com.example.myfirstapplication.ui.SeriesScreen
 import com.example.myfirstapplication.ui.Socials
 
@@ -91,83 +96,143 @@ class MainActivity : ComponentActivity() {
 
             MyFirstApplicationTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
+                    bottomBar = {
                         if (!isProfilDest) {
-                            Surface(
-                                color = Color.Cyan
-                            )
-                            {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(15.dp)
+                            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
+                                Surface(
+                                    color = Color.Cyan
                                 ) {
-                                    TextButton(
-                                        onClick = { navController.navigate(ProfilDest()) },
-                                        colors = ButtonDefaults.textButtonColors(Color.Blue)
+                                    NavigationBar(
+                                        containerColor = Color.Cyan,
                                     ) {
-                                        Text(
-                                            "Profil",
-                                            color = Color.White
+                                        NavigationBarItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_local_movies_24),
+                                                    contentDescription = "movies",
+                                                )
+                                            }, label = { Text("Films") },
+                                            selected = currentDestination?.hasRoute<FilmsDest>() == true,
+                                            onClick = { navController.navigate(FilmsDest()) }
                                         )
+                                        NavigationBarItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_tv_24),
+                                                    contentDescription = "series",
+                                                )
+                                            }, label = { Text("Séries") },
+                                            selected = currentDestination?.hasRoute<SeriesDest>() == true,
+                                            onClick = { navController.navigate(SeriesDest()) }
+                                        )
+                                        NavigationBarItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_person_24),
+                                                    contentDescription = "acteurs",
+                                                )
+                                            }, label = { Text("Acteurs") },
+                                            selected = currentDestination?.hasRoute<ActeursDest>() == true,
+                                            onClick = { navController.navigate(ActeursDest()) })
                                     }
+                                }
+                            } else { //Bottom bar paysage
+                                Surface(
+                                    color = Color.Cyan
+                                ) {
+                                    NavigationRail(
+                                        containerColor = Color.Cyan,
+                                    ) {
+                                        NavigationRailItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_local_movies_24),
+                                                    contentDescription = "movies",
+                                                )
+                                            }, label = { Text("Films") },
+                                            selected = currentDestination?.hasRoute<FilmsDest>() == true,
+                                            onClick = { navController.navigate(FilmsDest()) }
+                                        )
+                                        NavigationRailItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_tv_24),
+                                                    contentDescription = "series",
+                                                )
+                                            }, label = { Text("Séries") },
+                                            selected = currentDestination?.hasRoute<SeriesDest>() == true,
+                                            onClick = { navController.navigate(SeriesDest()) }
+                                        )
+                                        NavigationRailItem(
+                                            icon = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.baseline_person_24),
+                                                    contentDescription = "acteurs",
+                                                )
+                                            }, label = { Text("Acteurs") },
+                                            selected = currentDestination?.hasRoute<ActeursDest>() == true,
+                                            onClick = { navController.navigate(ActeursDest()) })
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    topBar = {
+                        val searchText by remember { mutableStateOf("") }
+                        val isSearchActive by remember { mutableStateOf(false) }
+                        if (!isProfilDest) {
+                            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
+                                Surface(
+                                    color = Color.Cyan
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(15.dp)
+                                    ) {
+                                        TextButton(
+                                            onClick = { navController.navigate(ProfilDest()) },
+                                            colors = ButtonDefaults.textButtonColors(Color.Blue)
+                                        ) {
+                                            Text(
+                                                "Profil",
+                                                color = Color.White
+                                            )
+                                        }
+                                        Icon(
+                                            painter = painterResource(R.drawable.baseline_search_24),
+                                            contentDescription = "recherche",
+                                            modifier = Modifier
+                                                .size(30.dp)
+                                                .clickable { navController.navigate(SearchDest()) },
+                                        )
+
+                                    }
+                                }
+                            } else { // PAYSAGE top bar
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(15.dp)
+                                )
+                                Button(
+                                    onClick = { navController.navigate(SearchDest()) },
+                                    colors = ButtonDefaults.buttonColors(Color.Cyan),
+                                    modifier = Modifier
+                                        .padding(15.dp)
+                                        //.align(Alignment.BottomEnd)
+                                ) {
                                     Icon(
                                         painter = painterResource(R.drawable.baseline_search_24),
                                         contentDescription = "recherche",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .clickable { navController.navigate(SearchDest()) },
+                                        modifier = Modifier.size(30.dp)
                                     )
                                 }
                             }
                         }
                     },
-                    bottomBar = {
-                        if (!isProfilDest) {
-                            Surface(
-                                color = Color.Cyan
-                            )
-                            {
-                                NavigationBar(
-                                    containerColor = Color.Cyan,
-                                )
-                                {
-                                    NavigationBarItem(
-                                        icon = {
-                                            Icon(
-                                                painter = painterResource(R.drawable.baseline_local_movies_24),
-                                                contentDescription = "movies",
-                                            )
-                                        }, label = { Text("Films") },
-                                        selected = currentDestination?.hasRoute<FilmsDest>() == true,
-                                        onClick = { navController.navigate(FilmsDest()) }
-                                    )
-                                    NavigationBarItem(
-                                        icon = {
-                                            Icon(
-                                                painter = painterResource(R.drawable.baseline_tv_24),
-                                                contentDescription = "series",
-                                            )
-                                        }, label = { Text("Séries") },
-                                        selected = currentDestination?.hasRoute<SeriesDest>() == true,
-                                        onClick = { navController.navigate(SeriesDest()) }
-                                    )
-                                    NavigationBarItem(
-                                        icon = {
-                                            Icon(
-                                                painter = painterResource(R.drawable.baseline_person_24),
-                                                contentDescription = "acteurs",
-                                            )
-                                        }, label = { Text("Acteurs") },
-                                        selected = currentDestination?.hasRoute<ActeursDest>() == true,
-                                        onClick = { navController.navigate(ActeursDest()) })
-                                }
-                            }
-                        }
-                    }
                 )
 
                 { innerPadding ->
@@ -184,6 +249,7 @@ class MainActivity : ComponentActivity() {
                         composable<FilmsDest> { FilmsScreen(viewmodel) }
                         composable<SeriesDest> { SeriesScreen(viewmodel) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
+                        composable<SearchDest> { SearchScreen(viewmodel) }
                     }
                 }
             }

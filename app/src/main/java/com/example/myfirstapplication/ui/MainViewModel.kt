@@ -1,5 +1,6 @@
 package com.example.myfirstapplication.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,6 +53,16 @@ class MainViewModel : ViewModel() {
             // Appel à l'API pour obtenir la liste des acteurs
             val actorsList = api.getActeursTendance(api_key)
             listActors.value = actorsList.results
+        }
+    }
+
+    fun SearchMovie() {
+        viewModelScope.launch{
+            try {
+                listMovies.value = api.getFilmParMotCle(api_key).results
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
+            }
         }
     }
 }
