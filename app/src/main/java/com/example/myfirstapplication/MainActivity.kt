@@ -166,6 +166,7 @@ class MainActivity : ComponentActivity() {
                                             selected = currentDestination?.hasRoute<FilmsDest>() == true,
                                             onClick = { navController.navigate(FilmsDest()) }
                                         )
+
                                         NavigationRailItem(
                                             icon = {
                                                 Icon(
