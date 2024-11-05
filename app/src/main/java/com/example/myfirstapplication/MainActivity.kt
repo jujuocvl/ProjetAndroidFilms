@@ -35,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,11 +67,9 @@ import com.example.myfirstapplication.ui.Bouton
 import com.example.myfirstapplication.ui.FilmsScreen
 import com.example.myfirstapplication.ui.theme.MyFirstApplicationTheme
 import kotlinx.serialization.Serializable
-
 import com.example.myfirstapplication.ui.MainViewModel
 import com.example.myfirstapplication.ui.Presentation
 import com.example.myfirstapplication.ui.Screen
-import com.example.myfirstapplication.ui.SearchScreen
 import com.example.myfirstapplication.ui.SeriesScreen
 import com.example.myfirstapplication.ui.Socials
 import com.example.myfirstapplication.ui.movieDetails
@@ -87,9 +86,6 @@ class SeriesDest
 
 @Serializable
 class ActeursDest
-
-@Serializable
-class SearchDest
 
 @Serializable
 class FilmDetailDest(val movieId: Int)
@@ -204,9 +200,9 @@ class MainActivity : ComponentActivity() {
                                         value = viewmodel.searchText,
                                         onValueChange = { viewmodel.searchText = it },
                                         placeholder = { Text("Rechercher un film, une série...") },
-                                        label = { Text("Recherche") },
                                         modifier = Modifier
-                                            .fillMaxWidth(),
+                                            .fillMaxWidth()
+                                            .padding(15.dp),
 
                                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                                         keyboardActions = KeyboardActions(
@@ -215,10 +211,10 @@ class MainActivity : ComponentActivity() {
                                                 viewmodel.SearchMovie()
                                                 viewmodel.SearchSerie()
                                                 viewmodel.SearchActor()
-                                                //navController.navigate(SearchDest())
                                             }
                                         )
                                     )
+
                                 } else {
                                     Surface(
                                         color = Color.Cyan
@@ -246,7 +242,6 @@ class MainActivity : ComponentActivity() {
                                                     .size(30.dp)
                                                     .clickable {
                                                         SearchBar = !SearchBar
-                                                        //navController.navigate(SearchDest())
                                                     },
                                             )
 
@@ -255,7 +250,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             } else { // PAYSAGE top bar
                                 FloatingActionButton(
-                                    onClick = { navController.navigate(SearchDest()) },
+                                    onClick = { SearchBar = !SearchBar },
                                     containerColor = Color.Cyan,
                                     modifier = Modifier
                                         .padding(150.dp)
@@ -286,7 +281,6 @@ class MainActivity : ComponentActivity() {
                         composable<FilmsDest> { FilmsScreen(viewmodel, navController) }
                         composable<SeriesDest> { SeriesScreen(viewmodel, navController) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
-                        composable<SearchDest> { SearchScreen(viewmodel) }
                         composable<FilmDetailDest> { backStackEntry ->
                             val movieId =
                                 backStackEntry.toRoute<FilmDetailDest>().movieId.toString()

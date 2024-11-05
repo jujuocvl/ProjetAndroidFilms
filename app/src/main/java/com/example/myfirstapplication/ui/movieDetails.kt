@@ -37,7 +37,7 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
 
     //verifie sur movie est nul
     movie?.let { //si movie n'est pas null, alors continue execution
-        //val genreNames = film.genre_ids.joinToString(", ") { it.name }
+        //val genre = movie.genre_ids.joinToString(", ") { genre.name.toString()}
         //recupère les noms des genres au idt de genre du film séparés par une virgule
 
         LaunchedEffect(key1 = Unit) { //évite les boucles infinies
@@ -70,6 +70,9 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                         text = "Date de sortie: ${movie.release_date}",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+                    Text(
+                        text = "Genres : ${movie.genres}",
+                        )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = movie.overview,

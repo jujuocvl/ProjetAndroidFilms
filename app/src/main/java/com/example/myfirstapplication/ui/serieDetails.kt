@@ -24,13 +24,14 @@ import coil.compose.AsyncImage
 
 @Composable
 fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: NavController) {
-    mainViewModel.getSerieDetails(serieId)
     val listSeries by mainViewModel.listSeries.collectAsStateWithLifecycle()
     val serie = listSeries.find { it.id.toString() == serieId}
     //évite les if suivants le format de l'écran
     val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
     val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
     val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
+
+    mainViewModel.getSerieDetails(serieId)
 
     //verifie sur serie est nul
     serie?.let { //si serie n'est pas null, alors continue execution
