@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
 
 
     //FILMS : StateFlow maitient l'état de la liste des films
-    private val listMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val listMovies = MutableStateFlow<List<Movie>>(emptyList())
     val movies: StateFlow<List<Movie>> = listMovies
 
     //SERIES: StateFlow maitient l'état de la liste des series
@@ -63,6 +63,14 @@ class MainViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
             }
+        }
+    }
+
+    fun getMovieDetails(id: String) {
+        viewModelScope.launch {
+            val movieResult = api.MovieDetails(id, api_key)
+            val movie = movieResult
+            listMovies.value = listOf(movie)
         }
     }
 }

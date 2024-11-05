@@ -1,6 +1,7 @@
 package com.example.myfirstapplication.ui
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TmdbAPI {
@@ -17,5 +18,7 @@ interface TmdbAPI {
     @GET("movie/api_key")
     suspend fun getFilmParMotCle(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
 
+    @GET("movie/{id}")
+    suspend fun MovieDetails(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") langague: String="fr"): Movie
 
 }

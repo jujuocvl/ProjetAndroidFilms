@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -65,6 +67,7 @@ import com.example.myfirstapplication.ui.Screen
 import com.example.myfirstapplication.ui.SearchScreen
 import com.example.myfirstapplication.ui.SeriesScreen
 import com.example.myfirstapplication.ui.Socials
+import com.example.myfirstapplication.ui.movieDetails
 
 @Serializable
 class FilmsDest
@@ -178,8 +181,8 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     topBar = {
-                        val searchText by remember { mutableStateOf("") }
-                        val isSearchActive by remember { mutableStateOf(false) }
+                        //val searchText by remember { mutableStateOf("") }
+                        //val isSearchActive by remember { mutableStateOf(false) }
                         if (!isProfilDest) {
                             if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
                                 Surface(
@@ -197,7 +200,7 @@ class MainActivity : ComponentActivity() {
                                             colors = ButtonDefaults.textButtonColors(Color.Blue)
                                         ) {
                                             Text(
-                                                "Profil",
+                                                "Home",
                                                 color = Color.White
                                             )
                                         }
@@ -212,17 +215,12 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             } else { // PAYSAGE top bar
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(15.dp)
-                                )
-                                Button(
+                                FloatingActionButton(
                                     onClick = { navController.navigate(SearchDest()) },
-                                    colors = ButtonDefaults.buttonColors(Color.Cyan),
+                                    containerColor = Color.Cyan,
                                     modifier = Modifier
-                                        .padding(15.dp)
-                                        //.align(Alignment.BottomEnd)
+                                        .padding(150.dp)
+                                        .clip(CircleShape)
                                 ) {
                                     Icon(
                                         painter = painterResource(R.drawable.baseline_search_24),
@@ -246,16 +244,22 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
-                        composable<FilmsDest> { FilmsScreen(viewmodel) }
+                        composable<FilmsDest> { FilmsScreen(viewmodel, navController) }
                         composable<SeriesDest> { SeriesScreen(viewmodel) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
                         composable<SearchDest> { SearchScreen(viewmodel) }
+                        composable("MovieDetails/{movie.id}") { backStackEntry ->
+                            val movieId =
+                                backStackEntry.arguments?.getString("movie.id") ?: return@composable
+                            movieDetails(viewmodel, movieId, navController)
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 
 

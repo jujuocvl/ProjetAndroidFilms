@@ -36,15 +36,15 @@ import com.example.myfirstapplication.FilmsDest
 import com.example.myfirstapplication.R
 
 @Composable
-fun Screen(classes: WindowSizeClass, navController:NavController) {
+fun Screen(classes: WindowSizeClass, navController: NavController) {
     when (classes.windowWidthSizeClass) {
         WindowWidthSizeClass.COMPACT -> { //PORTRAIT
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.LightGray)
+                    .fillMaxSize()
+                    .background(Color.LightGray)
             ) {
                 Presentation()
                 Socials()
@@ -93,43 +93,45 @@ fun Presentation() {
                 .clip(CircleShape)
                 .scale(1.25f)
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(10.dp))
         Text(text = "Julie ORCIVAL", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(40.dp))
+        Spacer(Modifier.height(10.dp))
         Text(text = "Etudiante en 4ème année")
         Text(textAlign = TextAlign.Center, text = "Ecole d'ingénieurs")
         Text(text = "en informatique pour la santé")
         Text(text = "ISIS partenaire INSA", fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(35.dp))
+        Spacer(Modifier.height(20.dp))
     }
 }
 
 @Composable
 fun Socials() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(10.dp)
             .background(Color.Cyan, CircleShape.copy(all = CornerSize(8.dp))),
-        ) {
-        Column() {
+    ) {
+        Row {
             Icon(
                 painter = painterResource(R.drawable.baseline_email_24),
                 contentDescription = "mail",
                 modifier = Modifier.size(24.dp)
             )
+            Text(text = "julie.orcival@gmail.com")
+        }
+        Row {
             Icon(
                 painter = painterResource(R.drawable.baseline_link_24),
                 contentDescription = "link",
                 modifier = Modifier.size(24.dp)
             )
-        }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "julie.orcival@gmail.com")
             Text(text = "www.linkedin.com/in/julie-orcival")
         }
     }
 }
+
 @Composable
 fun Bouton(navController: NavController) {
     Spacer(modifier = Modifier.size(32.dp))

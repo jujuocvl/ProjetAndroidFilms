@@ -1,5 +1,6 @@
 package com.example.myfirstapplication.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,11 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
 @Composable
-fun FilmsScreen(mainViewModel: MainViewModel) {
+fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
     // Collecte l'état des films depuis le ViewModel
     val movies by mainViewModel.movies.collectAsState()
 
@@ -40,7 +42,11 @@ fun FilmsScreen(mainViewModel: MainViewModel) {
                 items(movies.size) { index -> //itérable
                     val movie = movies[index]
                     Card(
-                        modifier = Modifier.padding(10.dp),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable { // Navigate to movieDetails.kt
+                                    navController.navigate("filmDetail/${movie.id}")
+                    },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,
