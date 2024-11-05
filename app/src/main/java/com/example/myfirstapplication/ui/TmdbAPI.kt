@@ -9,16 +9,25 @@ interface TmdbAPI {
     @GET("trending/movie/week")
     suspend fun getFilmTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
 
-    @GET("trending/serie/week")
+    @GET("trending/tv/week")
     suspend fun getSeriesTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbSeriesResult
 
     @GET("trending/person/week")
     suspend fun getActeursTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbActorsResult
 
-    @GET("movie/api_key")
-    suspend fun getFilmParMotCle(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
+    @GET("search/movie")
+    suspend fun getFilmParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbMoviesResult
 
     @GET("movie/{id}")
     suspend fun MovieDetails(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") langague: String="fr"): Movie
+
+    @GET("tv/{id}")
+    suspend fun SeriesDetails(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") langague: String="fr"): Series
+
+    @GET("search/tv")
+    suspend fun getSerieParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbSeriesResult
+
+    @GET("search/person")
+    suspend fun getActeurParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbActorsResult
 
 }

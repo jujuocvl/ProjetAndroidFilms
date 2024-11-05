@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FabPosition
@@ -32,11 +34,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +48,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +58,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.myfirstapplication.ui.ActeursScreen
@@ -68,6 +74,7 @@ import com.example.myfirstapplication.ui.SearchScreen
 import com.example.myfirstapplication.ui.SeriesScreen
 import com.example.myfirstapplication.ui.Socials
 import com.example.myfirstapplication.ui.movieDetails
+import com.example.myfirstapplication.ui.serieDetails
 
 @Serializable
 class FilmsDest
@@ -84,6 +91,12 @@ class ActeursDest
 @Serializable
 class SearchDest
 
+@Serializable
+class FilmDetailDest(val movieId: Int)
+
+@Serializable
+class SerieDetailDest(val serieId: Int)
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +109,7 @@ class MainActivity : ComponentActivity() {
             val currentDestination = navBackStackEntry?.destination
             val viewmodel: MainViewModel by viewModels()
             val isProfilDest = currentDestination?.hasRoute<ProfilDest>() == true
+            var SearchBar by remember { mutableStateOf(false) }
 
             MyFirstApplicationTheme {
                 Scaffold(
@@ -185,33 +199,58 @@ class MainActivity : ComponentActivity() {
                         //val isSearchActive by remember { mutableStateOf(false) }
                         if (!isProfilDest) {
                             if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
-                                Surface(
-                                    color = Color.Cyan
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                if (SearchBar) {
+                                    TextField(
+                                        value = viewmodel.searchText,
+                                        onValueChange = { viewmodel.searchText = it },
+                                        placeholder = { Text("Rechercher un film, une série...") },
+                                        label = { Text("Recherche") },
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(15.dp)
-                                    ) {
-                                        TextButton(
-                                            onClick = { navController.navigate(ProfilDest()) },
-                                            colors = ButtonDefaults.textButtonColors(Color.Blue)
-                                        ) {
-                                            Text(
-                                                "Home",
-                                                color = Color.White
-                                            )
-                                        }
-                                        Icon(
-                                            painter = painterResource(R.drawable.baseline_search_24),
-                                            contentDescription = "recherche",
-                                            modifier = Modifier
-                                                .size(30.dp)
-                                                .clickable { navController.navigate(SearchDest()) },
-                                        )
+                                            .fillMaxWidth(),
 
+                                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                                        keyboardActions = KeyboardActions(
+                                            onSearch = {
+                                                SearchBar = false
+                                                viewmodel.SearchMovie()
+                                                viewmodel.SearchSerie()
+                                                viewmodel.SearchActor()
+                                                //navController.navigate(SearchDest())
+                                            }
+                                        )
+                                    )
+                                } else {
+                                    Surface(
+                                        color = Color.Cyan
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(15.dp)
+                                        ) {
+                                            TextButton(
+                                                onClick = { navController.navigate(ProfilDest()) },
+                                                colors = ButtonDefaults.textButtonColors(Color.Blue)
+                                            ) {
+                                                Text(
+                                                    "Home",
+                                                    color = Color.White
+                                                )
+                                            }
+                                            Icon(
+                                                painter = painterResource(R.drawable.baseline_search_24),
+                                                contentDescription = "recherche",
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                                    .clickable {
+                                                        SearchBar = !SearchBar
+                                                        //navController.navigate(SearchDest())
+                                                    },
+                                            )
+
+                                        }
                                     }
                                 }
                             } else { // PAYSAGE top bar
@@ -245,13 +284,18 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<FilmsDest> { FilmsScreen(viewmodel, navController) }
-                        composable<SeriesDest> { SeriesScreen(viewmodel) }
+                        composable<SeriesDest> { SeriesScreen(viewmodel, navController) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
                         composable<SearchDest> { SearchScreen(viewmodel) }
-                        composable("MovieDetails/{movie.id}") { backStackEntry ->
+                        composable<FilmDetailDest> { backStackEntry ->
                             val movieId =
-                                backStackEntry.arguments?.getString("movie.id") ?: return@composable
+                                backStackEntry.toRoute<FilmDetailDest>().movieId.toString()
                             movieDetails(viewmodel, movieId, navController)
+                        }
+                        composable<SerieDetailDest> { backStackEntry ->
+                            val serieId =
+                                backStackEntry.toRoute<SerieDetailDest>().serieId.toString()
+                            serieDetails(viewmodel, serieId, navController)
                         }
                     }
                 }

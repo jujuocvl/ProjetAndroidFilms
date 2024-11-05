@@ -1,6 +1,9 @@
 package com.example.myfirstapplication.ui
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +27,14 @@ class MainViewModel : ViewModel() {
     val movies: StateFlow<List<Movie>> = listMovies
 
     //SERIES: StateFlow maitient l'état de la liste des series
-    private val listSeries = MutableStateFlow<List<Series>>(emptyList())
+    val listSeries = MutableStateFlow<List<Series>>(emptyList())
     val series: StateFlow<List<Series>> = listSeries
 
     //ACTEURS: StateFlow maitient l'état de la liste des series
     private val listActors = MutableStateFlow<List<Actors>>(emptyList())
     val actors: StateFlow<List<Actors>> = listActors
+
+    var searchText by mutableStateOf("")
 
     // Fonction pour récupérer les films
     fun getFilms() {
@@ -56,10 +61,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun SearchMovie() {
+    fun SearchMovie() { //recherhe de film
         viewModelScope.launch{
             try {
-                listMovies.value = api.getFilmParMotCle(api_key).results
+                listMovies.value = api.getFilmParMotCle(api_key, searchText).results
             } catch (e: Exception) {
                 Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
             }
@@ -71,6 +76,34 @@ class MainViewModel : ViewModel() {
             val movieResult = api.MovieDetails(id, api_key)
             val movie = movieResult
             listMovies.value = listOf(movie)
+        }
+    }
+
+    fun SearchSerie() { //recherche les series
+        viewModelScope.launch{
+            try {
+                listSeries.value = api.getSerieParMotCle(api_key, searchText).results
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
+            }
+        }
+    }
+
+    fun getSerieDetails(id: String) {
+        viewModelScope.launch {
+            val serieResult = api.SeriesDetails(id, api_key)
+            val serie = serieResult
+            listSeries.value = listOf(serie)
+        }
+    }
+
+    fun SearchActor() { //recherche les acteurs
+        viewModelScope.launch{
+            try {
+                listActors.value = api.getActeurParMotCle(api_key, searchText).results
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -32,9 +33,8 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
     //évite les if suivants le format de l'écran
     val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
     val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
-    val columns = if(format) 2 else 4 //si l'écran est en mode portrait on affiche 2 colonnes sinon 4 colonnes
+    val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
 
-    //vérifie si movie n'est pas null puis extrait et formate les données du film
     //verifie sur movie est nul
     movie?.let { //si movie n'est pas null, alors continue execution
         //val genreNames = film.genre_ids.joinToString(", ") { it.name }
@@ -50,16 +50,16 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            item(span = { GridItemSpan(columns) }) {
+            item {
                 Column {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
                         contentDescription = "affiche film",//movie.title,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(300.dp)
+                            .height(250.dp)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = movie.title,
                         fontWeight = FontWeight.Bold,
@@ -72,16 +72,9 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = movie.overview?.takeIf {
-                            it.isNotEmpty() }
-                        ?: "Résumé non disponible",
+                        text = movie.overview,
+                        textAlign = TextAlign.Justify,
                         )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    /*Text(
-                        text = "Acteurs :",
-                        )
-                    Spacer(modifier = Modifier.height(8.dp))
-                     */
                 }
             }
         }

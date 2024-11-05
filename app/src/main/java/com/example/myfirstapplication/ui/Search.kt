@@ -23,7 +23,12 @@ import java.lang.reflect.Modifier
 
 @Composable
 fun SearchScreen(mainviewModel: MainViewModel) {
-    LaunchedEffect(Unit) {
-        mainviewModel.SearchMovie()
-    }
+    mainviewModel.SearchMovie()
+    mainviewModel.SearchSerie()
+    mainviewModel.SearchActor()
+
+    Text("Résultat de la recherche :",
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+    )
 }

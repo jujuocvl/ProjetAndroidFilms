@@ -67,3 +67,8 @@ data class Actors(
     val credit_id: String,
     val order: Int
 )
+
+data class Genre(
+    val id: Int,
+    val name: String = ""
+)

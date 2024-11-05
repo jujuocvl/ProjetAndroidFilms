@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
+import com.example.myfirstapplication.FilmDetailDest
 
 @Composable
 fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
@@ -45,7 +46,7 @@ fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable { // Navigate to movieDetails.kt
-                                    navController.navigate("filmDetail/${movie.id}")
+                                    navController.navigate(FilmDetailDest(movie.id))
                     },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,

@@ -1,5 +1,6 @@
 package com.example.myfirstapplication.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,12 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
+import com.example.myfirstapplication.FilmDetailDest
+import com.example.myfirstapplication.SerieDetailDest
 
 @Composable
-fun SeriesScreen(mainViewModel: MainViewModel) {
-    // Collecte l'état des films depuis le ViewModel
+fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
+    // Collecte l'état des series depuis le ViewModel
     val series by mainViewModel.series.collectAsState()
 
     //charger liste des films si liste vide
@@ -41,89 +45,93 @@ fun SeriesScreen(mainViewModel: MainViewModel) {
                 items(series.size) { index -> //itérable
                     val serie = series[index]
                     Card(
-                        modifier = Modifier.padding(10.dp),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable {
+                                navController.navigate(SerieDetailDest(serie.id))
+                            },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,
                         )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(5.dp),
-                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                         ) {
-                            AsyncImage(
-                                model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
-                                contentDescription = "Description de l'image",
-                                alignment = Alignment.Center,
-                            )
-                            Text(
-                                text = serie.name,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .align(Alignment.CenterHorizontally),
-                            )
-                            Text(
-                                //date
-                                text = serie.first_air_date,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .align(Alignment.CenterHorizontally),
-                                lineHeight = 1.sp,
-                            )
+                            Column(
+                                modifier = Modifier.padding(5.dp),
+                                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                            ) {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
+                                    contentDescription = "Description de l'image",
+                                    alignment = Alignment.Center,
+                                )
+                                Text(
+                                    text = serie.name,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .align(Alignment.CenterHorizontally),
+                                )
+                                Text(
+                                    //date
+                                    text = serie.first_air_date,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .align(Alignment.CenterHorizontally),
+                                    lineHeight = 1.sp,
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        else -> {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
-                modifier = Modifier.padding(10.dp) //16
-            ) {
-                items(series.size) { index -> //itérable
-                    val serie = series[index]
-                    Card(
-                        modifier = Modifier.padding(10.dp),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 8.dp,
-                            pressedElevation = 12.dp,
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(5.dp),
-                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            else -> {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(4),
+                    modifier = Modifier.padding(10.dp) //16
+                ) {
+                    items(series.size) { index -> //itérable
+                        val serie = series[index]
+                        Card(
+                            modifier = Modifier.padding(10.dp),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 8.dp,
+                                pressedElevation = 12.dp,
+                            )
                         ) {
-                            AsyncImage(
-                                model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
-                                contentDescription = "Description de l'image",
-                                alignment = Alignment.Center,
-                            )
-                            Text(
-                                text = serie.name,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .align(Alignment.CenterHorizontally),
-                            )
-                            Text(
-                                //date
-                                text = serie.first_air_date,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .align(Alignment.CenterHorizontally),
-                                lineHeight = 1.sp,
-                            )
+                            Column(
+                                modifier = Modifier.padding(5.dp),
+                                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                            ) {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
+                                    contentDescription = "Description de l'image",
+                                    alignment = Alignment.Center,
+                                )
+                                Text(
+                                    text = serie.name,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .align(Alignment.CenterHorizontally),
+                                )
+                                Text(
+                                    //date
+                                    text = serie.first_air_date,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .align(Alignment.CenterHorizontally),
+                                    lineHeight = 1.sp,
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
+        }
     }
-}
