@@ -34,7 +34,7 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
     val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
     val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
     val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
-
+    val genre = movie?.genres?.joinToString(", ") { it.name }
     //verifie sur movie est nul
     movie?.let { //si movie n'est pas null, alors continue execution
         //val genre = movie.genre_ids.joinToString(", ") { genre.name.toString()}
@@ -71,7 +71,7 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                     Text(
-                        text = "Genres : ${movie.genres}",
+                        text = "Genres : $genre",
                         )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
