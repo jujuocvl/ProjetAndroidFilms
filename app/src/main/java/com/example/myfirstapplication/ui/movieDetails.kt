@@ -1,5 +1,6 @@
 package com.example.myfirstapplication.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,15 +34,19 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
     mainViewModel.getMovieDetails(movieId)
     val listMovies by mainViewModel.listMovies.collectAsStateWithLifecycle()
     val movie = listMovies.find { it.id.toString() == movieId }
+
+    val cast by mainViewModel.listActors.collectAsStateWithLifecycle()
+    val casting = cast?.find { it.id.toString() == movieId }
     //évite les if suivants le format de l'écran
-    val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
-    val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
-    val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
+    val configuration =
+        LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
+    val format =
+        configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
+    val columns =
+        if (format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
     val genre = movie?.genres?.joinToString(", ") { it.name }
     //verifie sur movie est nul
-    movie?.let { //si movie n'est pas null, alors continue execution
-        //val genre = movie.genre_ids.joinToString(", ") { genre.name.toString()}
-        //recupère les noms des genres au idt de genre du film séparés par une virgule
+    movie?.let { film -> //si movie n'est pas null, alors continue execution
 
         LaunchedEffect(key1 = Unit) { //évite les boucles infinies
             mainViewModel.getMovieDetails(movieId)
@@ -50,11 +58,11 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            item {
+            item(span = { GridItemSpan(columns) }) {
                 Column {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                        contentDescription = "affiche film",//movie.title,
+                        contentDescription = "affiche film",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(250.dp)
@@ -72,14 +80,51 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                     )
                     Text(
                         text = "Genres : $genre",
-                        )
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = movie.overview,
                         textAlign = TextAlign.Justify,
-                        )
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Distribution :",
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+//la LazyVerticalGrid doit créer un item pour chaque élément de la liste soit par acteurs dans la distribution
+            film.credits?.let { credits ->
+                items(film.credits.casting) {
+
+                    Card(
+                        modifier = Modifier.padding(10.dp),
+                        elevation = CardDefaults.cardElevation(8.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(5.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            AsyncImage(
+                                model = "https://image.tmdb.org/t/p/w342${casting?.profile_path}",
+                                contentDescription = "Photo acteur",
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = casting?.name?:"Inconnu",
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(text = casting?.character?:"Inconnu")
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+

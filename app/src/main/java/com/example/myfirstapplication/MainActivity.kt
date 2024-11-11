@@ -192,8 +192,6 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     topBar = {
-                        //val searchText by remember { mutableStateOf("") }
-                        //val isSearchActive by remember { mutableStateOf(false) }
                         if (!isProfilDest) {
                             if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
                                 if (SearchBar) {

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.cast.Cast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class MainViewModel : ViewModel() {
     val series: StateFlow<List<Series>> = listSeries
 
     //ACTEURS: StateFlow maitient l'état de la liste des series
-    private val listActors = MutableStateFlow<List<Actors>>(emptyList())
+    val listActors = MutableStateFlow<List<Actors>>(emptyList())
     val actors: StateFlow<List<Actors>> = listActors
 
     var searchText by mutableStateOf("")
@@ -104,6 +105,13 @@ class MainViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("MainViewModel", "searchMovie: $e") // enregistre l'erreur
             }
+        }
+    }
+
+    fun getActorsInMovie(movieId: String) {
+        viewModelScope.launch {
+            val actorResult = api.getActeurFilmographie(movieId, api_key)
+            listMovies.value = actorResult.distrib.sortedByDescending { it.popularity }
         }
     }
 }

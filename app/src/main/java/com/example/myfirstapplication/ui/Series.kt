@@ -54,84 +54,84 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,
                         )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(5.dp),
+                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                         ) {
-                            Column(
-                                modifier = Modifier.padding(5.dp),
-                                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                            ) {
-                                AsyncImage(
-                                    model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
-                                    contentDescription = "Description de l'image",
-                                    alignment = Alignment.Center,
-                                )
-                                Text(
-                                    text = serie.name,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .align(Alignment.CenterHorizontally),
-                                )
-                                Text(
-                                    //date
-                                    text = serie.first_air_date,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .align(Alignment.CenterHorizontally),
-                                    lineHeight = 1.sp,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    modifier = Modifier.padding(10.dp) //16
-                ) {
-                    items(series.size) { index -> //itérable
-                        val serie = series[index]
-                        Card(
-                            modifier = Modifier.padding(10.dp),
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = 8.dp,
-                                pressedElevation = 12.dp,
+                            AsyncImage(
+                                model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
+                                contentDescription = "Description de l'image",
+                                alignment = Alignment.Center,
                             )
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(5.dp),
-                                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                            ) {
-                                AsyncImage(
-                                    model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
-                                    contentDescription = "Description de l'image",
-                                    alignment = Alignment.Center,
-                                )
-                                Text(
-                                    text = serie.name,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .align(Alignment.CenterHorizontally),
-                                )
-                                Text(
-                                    //date
-                                    text = serie.first_air_date,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .align(Alignment.CenterHorizontally),
-                                    lineHeight = 1.sp,
-                                )
-                            }
+                            Text(
+                                text = serie.name,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.CenterHorizontally),
+                            )
+                            Text(
+                                //date
+                                text = serie.first_air_date,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.CenterHorizontally),
+                                lineHeight = 1.sp,
+                            )
                         }
                     }
                 }
             }
-
         }
+
+        else -> {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier.padding(10.dp) //16
+            ) {
+                items(series.size) { index -> //itérable
+                    val serie = series[index]
+                    Card(
+                        modifier = Modifier.padding(10.dp),
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 8.dp,
+                            pressedElevation = 12.dp,
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(5.dp),
+                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                        ) {
+                            AsyncImage(
+                                model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
+                                contentDescription = "Description de l'image",
+                                alignment = Alignment.Center,
+                            )
+                            Text(
+                                text = serie.name,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.CenterHorizontally),
+                            )
+                            Text(
+                                //date
+                                text = serie.first_air_date,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.CenterHorizontally),
+                                lineHeight = 1.sp,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
     }
+}

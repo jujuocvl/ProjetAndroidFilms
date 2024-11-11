@@ -1,9 +1,11 @@
 package com.example.myfirstapplication.ui
+
 data class TmdbMoviesResult(
     val page: Int,
     val results: List<Movie>,
     val total_pages: Int,
-    val total_results: Int
+    val total_results: Int,
+    val distrib: List<Movie> = listOf()//liste des films distribués par l'acteur
 )
 
 data class Movie(
@@ -21,7 +23,8 @@ data class Movie(
     val title: String,
     val video: Boolean,
     val vote_average: Double,
-    val vote_count: Int
+    val vote_count: Int,
+    val credits : Credits = Credits()
 )
 
 data class TmdbSeriesResult(
@@ -35,6 +38,7 @@ data class Series(
     val backdrop_path: String,
     val first_air_date: String,
     val genre_ids: List<Int>,
+    val genres : List<Genre> = listOf(),
     val id: Int,
     val name: String,
     val origin_country: List<String>,
@@ -44,7 +48,8 @@ data class Series(
     val popularity: Double,
     val poster_path: String,
     val vote_average: Double,
-    val vote_count: Int
+    val vote_count: Int,
+    val credits : Credits = Credits()
 )
 
 data class TmdbActorsResult(
@@ -66,10 +71,21 @@ data class Actors(
     val cast_id: Int,
     val character: String,
     val credit_id: String,
-    val order: Int
+    val order: Int,
 )
 
 data class Genre(
     val id: Int,
     val name: String
+)
+
+data class Credits( //liste de l'équipe du film
+    val casting: List<Casting> = listOf()
+)
+
+data class Casting( //acteurs du film
+    val id: String = "",
+    val name: String = "",
+    val profile_path: String? = "",
+    val character: String = ""
 )

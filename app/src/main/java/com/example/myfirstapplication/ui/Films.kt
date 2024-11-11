@@ -46,8 +46,8 @@ fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable { // Navigate to movieDetails.kt
-                                    navController.navigate(FilmDetailDest(movie.id))
-                    },
+                                navController.navigate(FilmDetailDest(movie.id))
+                            },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,

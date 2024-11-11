@@ -29,6 +29,7 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
     //évite les if suivants le format de l'écran
     val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
     val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
+    val genre = serie?.genres?.joinToString(", ") { it.name }
     val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
 
     mainViewModel.getSerieDetails(serieId)
@@ -66,10 +67,20 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
                         text = "Date de sortie: ${serie.first_air_date}",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+                    Text(
+                        text = "Genres : $genre",
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = serie.overview,
                         textAlign = TextAlign.Justify,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Distribution :",
+                        textAlign = TextAlign.Justify,
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
