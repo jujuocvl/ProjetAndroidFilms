@@ -1,5 +1,6 @@
 package com.example.myfirstapplication.ui
 
+import okhttp3.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -7,29 +8,46 @@ import retrofit2.http.Query
 interface TmdbAPI {
 
     @GET("trending/movie/week")
-    suspend fun getFilmTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
+    suspend fun getFilmTendance(@Query("api_key") api_key: String,
+                                @Query("language") language:String="fr"): TmdbMoviesResult
 
     @GET("trending/tv/week")
-    suspend fun getSeriesTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbSeriesResult
+    suspend fun getSeriesTendance(@Query("api_key") api_key: String,
+                                  @Query("language") language:String="fr"): TmdbSeriesResult
 
     @GET("trending/person/week")
-    suspend fun getActeursTendance(@Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbActorsResult
+    suspend fun getActeursTendance(@Query("api_key") api_key: String,
+                                   @Query("language") language:String="fr"): TmdbActorsResult
 
     @GET("search/movie")
-    suspend fun getFilmParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbMoviesResult
+    suspend fun getFilmParMotCle(@Query("api_key") api_key: String,
+                                 @Query("query") searchText: String,
+                                 @Query("language") language:String="fr"): TmdbMoviesResult
 
     @GET("movie/{id}")
-    suspend fun MovieDetails(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") langague: String="fr"): Movie
+    suspend fun MovieDetails(@Path("id") id: String,
+                             @Query("api_key") api_key: String,
+                             @Query("language") langague: String="fr",
+                             @Query("append_to_response") appendToResponse: String = "credits"): Movie
 
     @GET("tv/{id}")
-    suspend fun SeriesDetails(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") langague: String="fr"): Series
+    suspend fun SeriesDetails(@Path("id") id: String,
+                              @Query("api_key") api_key: String,
+                              @Query("language") langague: String="fr",
+                              @Query("append_to_response") appendToResponse: String = "credits"): Series
 
     @GET("search/tv")
-    suspend fun getSerieParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbSeriesResult
+    suspend fun getSerieParMotCle(@Query("api_key") api_key: String,
+                                  @Query("query") searchText: String,
+                                  @Query("language") language:String="fr"): TmdbSeriesResult
 
     @GET("search/person")
-    suspend fun getActeurParMotCle(@Query("api_key") api_key: String, @Query("query") searchText: String, @Query("language") language:String="fr"): TmdbActorsResult
+    suspend fun getActeurParMotCle(@Query("api_key") api_key: String,
+                                   @Query("query") searchText: String,
+                                   @Query("language") language:String="fr"): TmdbActorsResult
 
     @GET("person/{id}/movie_credits")
-    suspend fun getActeurFilmographie(@Path("id") id: String, @Query("api_key") api_key: String, @Query("language") language:String="fr"): TmdbMoviesResult
+    suspend fun getActeurFilmographie(@Path("id") id: String,
+                                      @Query("api_key") api_key: String,
+                                      @Query("language") language:String="fr"): TmdbMoviesResult
 }

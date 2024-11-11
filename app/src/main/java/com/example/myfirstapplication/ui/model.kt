@@ -5,7 +5,7 @@ data class TmdbMoviesResult(
     val results: List<Movie>,
     val total_pages: Int,
     val total_results: Int,
-    val distrib: List<Movie> = listOf()//liste des films distribués par l'acteur
+    val cast: List<Actors> = listOf()//liste des acteurs du film
 )
 
 data class Movie(
@@ -19,7 +19,7 @@ data class Movie(
     val overview: String,
     val popularity: Double,
     val poster_path: String,
-    val release_date: String,
+    val release_date: String ="",
     val title: String,
     val video: Boolean,
     val vote_average: Double,
@@ -84,8 +84,8 @@ data class Credits( //liste de l'équipe du film
 )
 
 data class Casting( //acteurs du film
-    val id: String = "",
-    val name: String = "",
-    val profile_path: String? = "",
-    val character: String = ""
+    val id: String,
+    val name: String,
+    val profile_path: String,
+    val character: String
 )

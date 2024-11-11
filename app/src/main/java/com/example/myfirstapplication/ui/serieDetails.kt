@@ -38,7 +38,7 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
     serie?.let { //si serie n'est pas null, alors continue execution
 
         LaunchedEffect(key1 = Unit) { //évite les boucles infinies
-            mainViewModel.getMovieDetails(serieId)
+            mainViewModel.getSerieDetails(serieId)
         }
 
         LazyVerticalGrid(
@@ -69,7 +69,8 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
                     )
                     Text(
                         text = "Genres : $genre",
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
