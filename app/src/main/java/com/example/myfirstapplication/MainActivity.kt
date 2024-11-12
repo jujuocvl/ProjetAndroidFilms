@@ -5,25 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -35,9 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,33 +34,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.myfirstapplication.ui.ActeursScreen
-import com.example.myfirstapplication.ui.Bouton
 import com.example.myfirstapplication.ui.FilmsScreen
 import com.example.myfirstapplication.ui.theme.MyFirstApplicationTheme
 import kotlinx.serialization.Serializable
 import com.example.myfirstapplication.ui.MainViewModel
-import com.example.myfirstapplication.ui.Presentation
 import com.example.myfirstapplication.ui.Screen
 import com.example.myfirstapplication.ui.SeriesScreen
-import com.example.myfirstapplication.ui.Socials
 import com.example.myfirstapplication.ui.movieDetails
 import com.example.myfirstapplication.ui.serieDetails
 
@@ -105,7 +85,7 @@ class MainActivity : ComponentActivity() {
             val currentDestination = navBackStackEntry?.destination
             val viewmodel: MainViewModel by viewModels()
             val isProfilDest = currentDestination?.hasRoute<ProfilDest>() == true
-            var SearchBar by remember { mutableStateOf(false) }
+            var searchBar by remember { mutableStateOf(false) }
 
             MyFirstApplicationTheme {
                 Scaffold(
@@ -194,7 +174,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (!isProfilDest) {
                             if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) { // PORTRAIT
-                                if (SearchBar) {
+                                if (searchBar) {
                                     TextField(
                                         value = viewmodel.searchText,
                                         onValueChange = { viewmodel.searchText = it },
@@ -206,7 +186,7 @@ class MainActivity : ComponentActivity() {
                                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                                         keyboardActions = KeyboardActions(
                                             onSearch = {
-                                                SearchBar = false
+                                                searchBar = false
                                                 viewmodel.SearchMovie()
                                                 viewmodel.SearchSerie()
                                                 viewmodel.SearchActor()
@@ -240,7 +220,7 @@ class MainActivity : ComponentActivity() {
                                                 modifier = Modifier
                                                     .size(30.dp)
                                                     .clickable {
-                                                        SearchBar = !SearchBar
+                                                        searchBar = !searchBar
                                                     },
                                             )
 
@@ -249,7 +229,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             } else { // PAYSAGE top bar
                                 FloatingActionButton(
-                                    onClick = { SearchBar = !SearchBar },
+                                    onClick = { searchBar = !searchBar },
                                     containerColor = Color.Cyan,
                                     modifier = Modifier
                                         .padding(150.dp)

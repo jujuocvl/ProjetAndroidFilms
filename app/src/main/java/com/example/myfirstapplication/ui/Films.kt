@@ -123,7 +123,6 @@ fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .align(Alignment.CenterHorizontally),
-                                lineHeight = 1.sp,
                             )
                         }
                     }

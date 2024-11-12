@@ -12,19 +12,19 @@ data class Movie(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
-    val genres : List<Genre> = listOf(),
+    val genres: List<Genre> = listOf(),
     val id: Int,
     val original_language: String,
     val original_title: String,
     val overview: String,
     val popularity: Double,
     val poster_path: String,
-    val release_date: String ="",
+    val release_date: String = "",
     val title: String,
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int,
-    val credits : Credits = Credits()
+    val credits: Credits = Credits()
 )
 
 data class TmdbSeriesResult(
@@ -38,7 +38,7 @@ data class Series(
     val backdrop_path: String,
     val first_air_date: String,
     val genre_ids: List<Int>,
-    val genres : List<Genre> = listOf(),
+    val genres: List<Genre> = listOf(),
     val id: Int,
     val name: String,
     val origin_country: List<String>,
@@ -49,7 +49,7 @@ data class Series(
     val poster_path: String,
     val vote_average: Double,
     val vote_count: Int,
-    val credits : Credits = Credits()
+    val credits: Credits = Credits()
 )
 
 data class TmdbActorsResult(
@@ -80,12 +80,13 @@ data class Genre(
 )
 
 data class Credits( //liste de l'équipe du film
-    val casting: List<Casting> = listOf()
+    val cast: List<Cast> = listOf()
 )
 
-data class Casting( //acteurs du film
+data class Cast( //acteurs du film
     val id: String,
     val name: String,
     val profile_path: String,
-    val character: String
+    val character: String,
+    val original_name: String,
 )

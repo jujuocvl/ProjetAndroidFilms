@@ -13,14 +13,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainViewModel : ViewModel() {
-    //Initialisation de Retrofit
+    //Initialisation de Retrofit pour lien avec API
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
         .addConverterFactory(MoshiConverterFactory.create())
         .build();
     val api = retrofit.create(TmdbAPI::class.java)
     val api_key = "317519a83cc36ab9367ba50e5aa75b40"
-
 
     //FILMS : StateFlow maitient l'état de la liste des films
     val listMovies = MutableStateFlow<List<Movie>>(emptyList())
@@ -36,7 +35,6 @@ class MainViewModel : ViewModel() {
 
     var searchText by mutableStateOf("")
 
-    // Fonction pour récupérer les films
     fun getFilms() {
         viewModelScope.launch {
             // Appel à l'API pour obtenir la liste des films
@@ -61,7 +59,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun SearchMovie() { //recherhe de film
+    fun SearchMovie() { //recherhe de films
         viewModelScope.launch {
             try {
                 listMovies.value = api.getFilmParMotCle(api_key, searchText).results
@@ -73,7 +71,7 @@ class MainViewModel : ViewModel() {
 
     fun getMovieDetails(id: String) {
         viewModelScope.launch {
-            val movieResult = api.MovieDetails(id, api_key)
+            val movieResult = api.MovieDetails(id, api_key,"fr","credits")
             val movie = movieResult
             listMovies.value = listOf(movie)
         }
@@ -91,7 +89,7 @@ class MainViewModel : ViewModel() {
 
     fun getSerieDetails(id: String) {
         viewModelScope.launch {
-            val serieResult = api.SeriesDetails(id, api_key)
+            val serieResult = api.SeriesDetails(id, api_key, "fr", "credits")
             val serie = serieResult
             listSeries.value = listOf(serie)
         }
@@ -107,15 +105,16 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getActorsInMovie(movieId: String) {
+    /*fun getActorsInMovie(movieId: String) {
         viewModelScope.launch {
             try {
                 val actorResult = api.getActeurFilmographie(movieId, api_key)
-                val actors = actorResult.cast ?: emptyList() // Ensure the correct property is used
+                val actors = actorResult.cast ?: emptyList()
                 listActors.value = actors
+                Log.d("aaa", "getActorsInMovie: actors list size = ${actors.size}")
             } catch (e: Exception) {
-                Log.e("MainViewModel", "getActorsInMovie: $e")
+                Log.e("aaaa", "getActorsInMovie: $e")
             }
         }
-    }
+    }*/
 }

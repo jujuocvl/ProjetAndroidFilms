@@ -1,13 +1,19 @@
 package com.example.myfirstapplication.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,12 +31,19 @@ import coil.compose.AsyncImage
 @Composable
 fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: NavController) {
     val listSeries by mainViewModel.listSeries.collectAsStateWithLifecycle()
-    val serie = listSeries.find { it.id.toString() == serieId}
+    val serie = listSeries.find { it.id.toString() == serieId }
+
+    //recupère la liste des acteurs dans le film
+    val cast by mainViewModel.listActors.collectAsStateWithLifecycle()
+
     //évite les if suivants le format de l'écran
-    val configuration = LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
-    val format = configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
+    val configuration =
+        LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
+    val format =
+        configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
     val genre = serie?.genres?.joinToString(", ") { it.name }
-    val columns = if(format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
+    val columns =
+        if (format) 2 else 4 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
 
     mainViewModel.getSerieDetails(serieId)
 
@@ -47,7 +60,7 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            item {
+            item(span = { GridItemSpan(columns) }) {
                 Column {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500/${serie.poster_path}",
@@ -83,6 +96,36 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
                         textAlign = TextAlign.Justify,
                         fontWeight = FontWeight.Bold,
                     )
+                }
+            }
+
+            items(cast) { cast ->
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(250.dp),
+                    elevation = CardDefaults.cardElevation(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w342${cast.profile_path}",
+                            contentDescription = "Photo acteur",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = cast.original_name ?: "Inconnu",
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = cast.character ?: "Inconnu"
+                        )
+                    }
                 }
             }
         }

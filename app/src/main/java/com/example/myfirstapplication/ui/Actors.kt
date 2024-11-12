@@ -25,7 +25,6 @@ import coil.compose.AsyncImage
 fun ActeursScreen(mainViewModel: MainViewModel) {
     val actors by mainViewModel.actors.collectAsState()
 
-    //charger liste des films si liste vide
     LaunchedEffect(key1 = Unit) { //évite les boucles infinies
         mainViewModel.getActors()
     }
@@ -88,7 +87,6 @@ fun ActeursScreen(mainViewModel: MainViewModel) {
                         modifier = Modifier.padding(10.dp),
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
-                            pressedElevation = 12.dp,
                         )
                     ) {
                         Column(
@@ -115,7 +113,6 @@ fun ActeursScreen(mainViewModel: MainViewModel) {
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .align(Alignment.CenterHorizontally),
-                                lineHeight = 1.sp,
                             )
                         }
                     }

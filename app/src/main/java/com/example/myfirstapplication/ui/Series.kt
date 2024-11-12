@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
-import com.example.myfirstapplication.FilmDetailDest
 import com.example.myfirstapplication.SerieDetailDest
 
 @Composable
@@ -40,7 +39,7 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
         WindowWidthSizeClass.COMPACT -> {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.padding(5.dp) //16
+                modifier = Modifier.padding(5.dp)
             ) {
                 items(series.size) { index -> //itérable
                     val serie = series[index]
@@ -90,7 +89,7 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
         else -> {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
-                modifier = Modifier.padding(10.dp) //16
+                modifier = Modifier.padding(10.dp)
             ) {
                 items(series.size) { index -> //itérable
                     val serie = series[index]

@@ -15,11 +15,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,26 +32,26 @@ import coil.compose.AsyncImage
 @Composable
 fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: NavController) {
     mainViewModel.getMovieDetails(movieId)
-    mainViewModel.getActorsInMovie(movieId)
     val listMovies by mainViewModel.listMovies.collectAsStateWithLifecycle()
     val movie = listMovies.find { it.id.toString() == movieId }
 
     //recupère la liste des acteurs dans le film
     val cast by mainViewModel.listActors.collectAsStateWithLifecycle()
-    //évite les if suivants le format de l'écran
+
+    //évite les if suivants le format de l'écran:
     val configuration =
         LocalConfiguration.current //recupère la configuration de l'écran avec les dimensions de l'écran et l'orientation
     val format =
         configuration.screenWidthDp < configuration.screenHeightDp //si l'écran est en mode portrait ou paysage
     val columns =
-        if (format) 1 else 2 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
+        if (format) 2 else 4 //si l'écran est en mode portrait on affiche 1 colonne sinon 2 colonnes
     val genre = movie?.genres?.joinToString(", ") { it.name }
     //verifie sur movie est nul
     movie?.let { film -> //si movie n'est pas null, alors continue execution
 
         LaunchedEffect(key1 = Unit) { //évite les boucles infinies
             mainViewModel.getMovieDetails(movieId)
-            mainViewModel.getActorsInMovie(movieId)
+            //mainViewModel.getActorsInMovie(movieId)
         }
 
         LazyVerticalGrid(
@@ -62,7 +60,7 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            item {
+            item (span = { GridItemSpan(columns) }) { // pour avoir 1 seul item sur la ligne puis 2 ou 4 colonnes
                 Column {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
@@ -99,18 +97,33 @@ fun movieDetails(mainViewModel: MainViewModel, movieId: String, navController: N
                     )
                 }
             }
-//la LazyVerticalGrid doit créer un item pour chaque élément de la liste soit par acteurs dans la distribution
-            //film.credits?.let { credits ->
-            items(cast) { casting ->
-                Row {
-                    AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w342${casting.profile_path}",
-                        contentDescription = "Photo acteur",
-                        modifier = Modifier.size(50.dp)
-                    )
-                    Column {
-                        Text(text = casting.name ?: "Inconnu", fontWeight = FontWeight.Bold)
-                        Text(text = casting.character ?: "Inconnu")
+
+            items(cast) { cast ->
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(250.dp),
+                    elevation = CardDefaults.cardElevation(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w342${cast.profile_path}",
+                            contentDescription = "Photo acteur",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = cast.original_name ?: "Inconnu",
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = cast.character ?: "Inconnu"
+                        )
                     }
                 }
             }
