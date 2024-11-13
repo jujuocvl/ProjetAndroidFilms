@@ -102,28 +102,30 @@ fun serieDetails(mainViewModel: MainViewModel, serieId: String, navController: N
             items(cast) { cast ->
                 Card(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .height(250.dp),
+                        .padding(10.dp),
                     elevation = CardDefaults.cardElevation(12.dp)
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp),
+                            .padding(5.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         AsyncImage(
                             model = "https://image.tmdb.org/t/p/w342${cast.profile_path}",
                             contentDescription = "Photo acteur",
-                            modifier = Modifier.size(20.dp)
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = cast.original_name ?: "Inconnu",
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = cast.character ?: "Inconnu"
+                            text = cast.character ?: "Inconnu",
+                            textAlign = TextAlign.Center
                         )
                     }
                 }

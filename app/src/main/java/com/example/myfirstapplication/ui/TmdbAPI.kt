@@ -61,11 +61,12 @@ interface TmdbAPI {
         @Query("language") language: String = "fr"
     ): TmdbActorsResult
 
-    @GET("person/{id}/movie_credits")
+    /*@GET("person/{id}/movie_credits")
     suspend fun getActeurFilmographie(
         @Path("id") id: String,
         @Query("api_key") api_key: String,
         @Query("language") language: String = "fr"
     ): TmdbMoviesResult
+     */
 
 }

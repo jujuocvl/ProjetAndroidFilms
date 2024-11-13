@@ -1,7 +1,9 @@
 package com.example.myfirstapplication.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
@@ -30,7 +32,7 @@ fun ActeursScreen(mainViewModel: MainViewModel) {
     }
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.COMPACT -> {
+        WindowWidthSizeClass.COMPACT -> { //PORTRAIT
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.padding(5.dp) //16
@@ -68,7 +70,6 @@ fun ActeursScreen(mainViewModel: MainViewModel) {
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .align(Alignment.CenterHorizontally),
-                                lineHeight = 1.sp,
                             )
                         }
                     }
@@ -107,7 +108,7 @@ fun ActeursScreen(mainViewModel: MainViewModel) {
                                     .align(Alignment.CenterHorizontally),
                             )
                             Text(
-                                //date
+                                //fonction
                                 text = actor.known_for_department,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier

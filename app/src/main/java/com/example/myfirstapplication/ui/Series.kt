@@ -36,7 +36,7 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.COMPACT -> {
+        WindowWidthSizeClass.COMPACT -> { //PORTRAIT
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.padding(5.dp)
