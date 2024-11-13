@@ -43,7 +43,7 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
             ) {
                 items(series.size) { index -> //itérable
                     val serie = series[index]
-                    Card(
+                   Card(
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable {
@@ -94,7 +94,11 @@ fun SeriesScreen(mainViewModel: MainViewModel, navController: NavController) {
                 items(series.size) { index -> //itérable
                     val serie = series[index]
                     Card(
-                        modifier = Modifier.padding(10.dp),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable {
+                                navController.navigate(SerieDetailDest(serie.id))
+                            },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,

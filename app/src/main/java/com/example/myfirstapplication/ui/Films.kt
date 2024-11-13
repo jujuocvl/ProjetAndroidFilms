@@ -93,7 +93,11 @@ fun FilmsScreen(mainViewModel: MainViewModel, navController: NavController) {
                 items(movies.size) { index -> //itérable
                     val movie = movies[index]
                     Card(
-                        modifier = Modifier.padding(10.dp),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable { // Navigate to movieDetails.kt
+                                navController.navigate(FilmDetailDest(movie.id))
+                            },
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp,
                             pressedElevation = 12.dp,
