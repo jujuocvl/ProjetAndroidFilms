@@ -47,6 +47,11 @@ fun Component(mainViewModel: MainViewModel, navController: NavController) {
                     modifier = Modifier.padding(5.dp),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500/${collection.poster_path}",
+                        contentDescription = "Description de l'image",
+                        alignment = Alignment.Center,
+                    )
                     Text(
                         text = collection.name,
                         fontWeight = FontWeight.Bold,
