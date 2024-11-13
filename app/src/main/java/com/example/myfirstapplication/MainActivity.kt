@@ -296,7 +296,7 @@ class MainActivity : ComponentActivity() {
                             painter = painterResource(R.drawable.baseline_new_releases_24),
                             contentDescription = "newcomponent",
                         )
-                    }, label = { Text("New") },
+                    }, label = { Text("Collections") },
                     selected = currentDestination?.hasRoute<NewDest>() == true,
                     onClick = { navController.navigate(NewDest()) }
                 )
