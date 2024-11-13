@@ -33,6 +33,10 @@ class MainViewModel : ViewModel() {
     val listActors = MutableStateFlow<List<Actors>>(emptyList())
     val actors: StateFlow<List<Actors>> = listActors
 
+    //COLLECTIONS
+    val listCollection = MutableStateFlow<List<Collection>>(emptyList())
+    val collection: StateFlow<List<Collection>> = listCollection
+
     var searchText by mutableStateOf("")
 
     fun getFilms() {
@@ -56,6 +60,14 @@ class MainViewModel : ViewModel() {
             // Appel à l'API pour obtenir la liste des acteurs
             val actorsList = api.getActeursTendance(api_key)
             listActors.value = actorsList.results
+        }
+    }
+
+    fun getCollection() {
+        viewModelScope.launch {
+            // Appel à l'API pour obtenir la liste des collections horreur
+            val collectionList = api.getCollectionHorreur(api_key)
+            listCollection.value = collectionList.results
         }
     }
 

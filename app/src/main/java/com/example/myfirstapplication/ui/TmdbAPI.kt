@@ -61,6 +61,13 @@ interface TmdbAPI {
         @Query("language") language: String = "fr"
     ): TmdbActorsResult
 
+    @GET("search/collection")
+    suspend fun getCollectionHorreur(
+        @Query("api_key") api_key: String,
+        @Query("language") language: String = "fr",
+        @Query("language") searchType: String = "horror",
+    ): CollectionResults
+
     /*@GET("person/{id}/movie_credits")
     suspend fun getActeurFilmographie(
         @Path("id") id: String,

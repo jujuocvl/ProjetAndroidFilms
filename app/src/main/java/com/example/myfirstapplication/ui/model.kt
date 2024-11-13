@@ -90,9 +90,13 @@ data class Cast( //acteurs du film
     val character: String,
     val original_name: String,
 )
+data class CollectionResults(
+    val results: List<Collection>,
+)
 
 data class Collection (
     val adult :String,
+    val results: List<Collection>,
     val backdrop_path : String,
     val id: String,
     val name:String,
