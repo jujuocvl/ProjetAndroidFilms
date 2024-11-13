@@ -5,7 +5,7 @@ data class TmdbMoviesResult(
     val results: List<Movie>,
     val total_pages: Int,
     val total_results: Int,
-    val cast: List<Actors> = listOf()//liste des acteurs du film
+    val cast: List<Movie> = listOf()//liste des acteurs du film
 )
 
 data class Movie(
