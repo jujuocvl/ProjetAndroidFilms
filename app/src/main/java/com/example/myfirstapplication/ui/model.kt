@@ -95,7 +95,7 @@ data class CollectionResults(
 )
 
 data class Collection (
-    val adult :String,
+    val adult :Boolean,
     val results: List<Collection>,
     val backdrop_path : String,
     val id: String,

@@ -64,8 +64,7 @@ interface TmdbAPI {
     @GET("search/collection")
     suspend fun getCollectionHorreur(
         @Query("api_key") api_key: String,
-        @Query("language") language: String = "fr",
-        @Query("language") searchType: String = "horror",
+        @Query("query") searchText: String = "horror",
     ): CollectionResults
 
     /*@GET("person/{id}/movie_credits")
