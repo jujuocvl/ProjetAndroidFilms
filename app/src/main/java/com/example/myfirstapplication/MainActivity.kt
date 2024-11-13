@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.core.view.KeyEventDispatcher
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -50,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.myfirstapplication.ui.ActeursScreen
+import com.example.myfirstapplication.ui.Component
 import com.example.myfirstapplication.ui.FilmsScreen
 import com.example.myfirstapplication.ui.theme.MyFirstApplicationTheme
 import kotlinx.serialization.Serializable
@@ -77,6 +79,9 @@ class FilmDetailDest(val movieId: Int)
 
 @Serializable
 class SerieDetailDest(val serieId: Int)
+
+@Serializable
+class NewDest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -206,6 +211,7 @@ class MainActivity : ComponentActivity() {
                         composable<FilmsDest> { FilmsScreen(viewmodel, navController) }
                         composable<SeriesDest> { SeriesScreen(viewmodel, navController) }
                         composable<ActeursDest> { ActeursScreen(viewmodel) }
+                        composable<NewDest> { Component(viewmodel, navController) }
                         composable<FilmDetailDest> { backStackEntry ->
                             val movieId =
                                 backStackEntry.toRoute<FilmDetailDest>().movieId.toString()
@@ -284,6 +290,17 @@ class MainActivity : ComponentActivity() {
                     }, label = { Text("Acteurs") },
                     selected = currentDestination?.hasRoute<ActeursDest>() == true,
                     onClick = { navController.navigate(ActeursDest()) })
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_new_releases_24),
+                            contentDescription = "newcomponent",
+                        )
+                    }, label = { Text("New") },
+                    selected = currentDestination?.hasRoute<NewDest>() == true,
+                    onClick = { navController.navigate(NewDest()) }
+                )
+
             }
         }
     }
